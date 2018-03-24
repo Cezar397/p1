@@ -299,8 +299,23 @@
 						break;
 				}
 
+
+
 			?>
 	</ul>
+
+
+	<?php
+
+
+		$idc = $_GET['id'];
+
+		if($_SESSION['id'] != $idc)
+			 echo '<a href="sendmessage.php?receiver='.$row["ID"].'">Send Message <a>';
+		else
+			 echo '<a href="message.php">Message<a>';
+
+	  ?>
 
 	<?php
 
@@ -333,9 +348,8 @@
 					echo '<a href="profil.php?id='.$id.'">'.$row_users['Name'].'<a>'.PHP_EOL;
 				}
 			}
+
 	?>
-
-
 
 
 
