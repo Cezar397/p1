@@ -20,7 +20,7 @@
 				$_SESSION['email'] = $row['Email'];
 				$_SESSION['id'] = $row['ID'];
 				$_SESSION['admin'] = $row['Admin'];
-
+				$_SESSION['logas'] = $row['Logas'];
 				header("Location: ../index.php?status=succes");
 			}else
 			{

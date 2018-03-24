@@ -16,7 +16,7 @@
 	$result_insert = mysqli_query($conectare, $inserare);
 
 	if($_GET['m']==0)
-	header("Location: ../sendmessage.php?status=mesajtrimis");
+	header("Location: ../sendmessage.php?status=mesajtrimis&receiver=".$_GET['id']);
 else
 	header("Location: ../reply.php?status=success&id=".$_GET['id']);
 	}
@@ -26,8 +26,4 @@ else
 		exit(0);
 	}
 	
-
-
-
-
 ?>

@@ -4,6 +4,8 @@
 
 	session_start();
 
+
+
 	if(!isset($_SESSION['nume']))
 		header("Location: login.php?status=needlog");
 
@@ -18,8 +20,10 @@
 
 		$meid = $_SESSION['id'];
 		$me = "SELECT * FROM users WHERE ID='$meid'";
-		$result2 = mysqli_query($conectare, $me);
-		$rowme = $result2->fetch_assoc();
+		$result = mysqli_query($conectare, $me);
+		$rowme = $result->fetch_assoc();
+
+	
 	}else
 	{
 		header("Location: login.php?status=needlog");
@@ -317,7 +321,19 @@
 
 	  ?>
 
+	  <?php
+	   if($rowme['Admin']>3 && $rowme['ID'] != $idc && $rowme['Logas'] == 0)
+	   {
+	   	echo '<a href="logas.php?id='.$idc.'">Log as</a>';
+	   }else if($_SESSION['logas'] == 1)
+	   {
+	   		echo '<a href="back.php">Back</a>';
+	   }
+
+	     ?>
+
 	<?php
+
 
 
 		if($rowme['Admin'] > $row['Admin'] && $rowme['ID'] != $row['ID'] && $rowme['Admin'] > 3)
@@ -348,7 +364,6 @@
 					echo '<a href="profil.php?id='.$id.'">'.$row_users['Name'].'<a>'.PHP_EOL;
 				}
 			}
-
 	?>
 
 
