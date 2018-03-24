@@ -80,3 +80,14 @@ font-family: 'Roboto', sans-serif;
 {
 	border-radius: 30px;
 }
+
+
+.table th
+{
+	text-align: center;
+}
+
+.conteiner
+{
+	text-align: left;
+}

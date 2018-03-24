@@ -15,9 +15,16 @@
 				$verificare = "SELECT Email FROM users WHERE Email='$email'";	
 				$result = mysqli_query($conectare, $verificare);
 
+				$verificare = "SELECT Name FROM users WHERE Name='$nume'";	
+				$result2 = mysqli_query($conectare, $verificare);
+
 				if(mysqli_num_rows($result) > 0)
 				{
 					header("Location: ../register.php?stauts=repetareemail");
+					exit(0);
+				}else if(mysqli_num_rows($result2) > 0)
+				{
+					header("Location: ../register.php?stauts=repetarenume");
 					exit(0);
 				}
 				else

@@ -1,3 +1,11 @@
+<?php
+	
+	session_start();
+
+	if(!empty($_SESSION['nume']))
+		header("Location: index.php");
+
+?>
 <!DOCTYPE html>
 <html>
 <head>

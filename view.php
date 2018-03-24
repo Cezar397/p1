@@ -1,15 +1,12 @@
-<!--
-	
-	Autor: Catarau Cezar-Iulian
-	Date(start): 16/03/2018
-	Date(finsih): unknown
-
-
-
--->
 <?php
 	
+	require 'include/connect.php';
+
 	session_start();
+
+	if(!isset($_SESSION['nume']))
+		header("Location: login.php?status=needlog");
+
 
 ?>
 <!DOCTYPE html>
@@ -32,6 +29,7 @@
 	<link rel="stylesheet" type="text/css"  media="screen and (min-width:900px)" href="assets/css/widescreen.css?v1.0">
 	<link rel="stylesheet" type="text/css"  media="screen and (min-width:630px) and (max-width: 900px)" href="assets/css/landscape.css?v1.0">
 	<link rel="stylesheet" type="text/css"  media="screen and (max-width:600px)" href="assets/css/smallscreen.css?v1.0">
+	<link rel="stylesheet" type="text/css" href="assets/css/register_login_contact.css?v1.0">
 	<!-- END CSS -->
 
 
@@ -102,7 +100,7 @@
 <div class="smallscreen">
 	
 	<nav class="navbar navbar-toggleable-sd navbar-inverse">
-		<a class="navbar-brand" href="#">LOGO</a>
+		<a class="navbar-brand" href="index.php">LOGO</a>
 		<button class="navbar-brand toggle" onclick="collapse()"><img class="toggle" src="assets/glyph-iconset-master/svg/si-glyph-align-right.svg" width="25" height="25"></button>
 		<div class="container">
 		<ul class="navbar-nav" id="target">
@@ -156,7 +154,7 @@
 	<div class="landscape">
 	
 	<nav class="navbar navbar-toggleable-sd navbar-inverse">
-		<a class="navbar-brand" href="#">LOGO</a>
+		<a class="navbar-brand" href="index.php">LOGO</a>
 		<button class="navbar-brand toggle" onclick="collapse2()"><img class="toggle" src="assets/glyph-iconset-master/svg/si-glyph-align-right.svg" width="25" height="25"></button>
 		<div class="container">
 		<ul class="navbar-nav" id="target2">
@@ -164,7 +162,7 @@
 			<br>
 			<br>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Acasă</a>
+				<a class="nav-link" href="index.php">Acasă</a>
 			</li>
 
 			<?php
@@ -205,87 +203,94 @@
 	</nav>
 </div>
 
-<div class="content">
-<div class="container">
-
-	<p class="title">Lorem Ipsum</p>
-	<br>
-	<br>
-	<p class="descriere">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-
-	<?php
-
-	if(!isset($_SESSION['nume']))
-		echo '<p class="text-danger" style="font-size: 20px;">You need to <a href="login.php">login</a> for view more content</p>';
-	else
-		echo'
-		<br><br><br>
-			<p class="title">Portofoliu</p>
-
-			<br><br><br>
-			<div class="cards">
-	<div class="row">
-	<div class="card">
-			
-		</div>
-	</div>
-
-		<div class="row">
-	<div class="card">
-		
-			
-		</div>
-	</div>
-
-		<div class="row">
-	<div class="card">
-		
-			
-		</div>
-	</div>
+	<div class="landscape">
 	
-	</div>
-<div class="cards">
-	<div class="row">
-	<div class="card">
-		
-			
-		</div>
-	</div>
+	<nav class="navbar navbar-toggleable-sd navbar-inverse">
+		<a class="navbar-brand" href="index.php">LOGO</a>
+		<button class="navbar-brand toggle" onclick="collapse2()"><img class="toggle" src="assets/glyph-iconset-master/svg/si-glyph-align-right.svg" width="25" height="25"></button>
+		<div class="container">
+		<ul class="navbar-nav" id="target2">
+			<br>
+			<br>
+			<br>
+			<li class="nav-item">
+				<a class="nav-link" href="index.php">Acasă</a>
+			</li>
 
-		<div class="row">
-	<div class="card">
-		
-			
-		</div>
-	</div>
+			<?php
 
-		<div class="row">
-	<div class="card">
-		
-			
-		</div>
-	</div>
+				if(isset($_SESSION['nume'])) 
+			echo '
+
+			<li class="nav-item">
+				<a class="nav-link" href="portofoliu.php">Portofoliu</a>
+			</li>';
+			?>
+			<li class="nav-item">
+				<a class="nav-link" href="contact.php">Contact</a>
+			</li>
+			<?php
+
+			if(!isset($_SESSION['nume']))
+				echo '
+			<li class="nav-item">
+				<a class="nav-link" href="login.php">Login</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" href="register.php">Register</a>
+			</li>';
+			else
+				echo '
+			<li class="nav-item">
+				<a class="nav-link" href="profil.php">Profil</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="include/logout.inc.php">Log Out</a>
+			</li>';
+			?>
+		</ul>
+	</nav>
 </div>
-	';
+
+<div class="container">
+	<?php
+		$id = $_GET['id'];
+
+		$mesaj= "SELECT * FROM message WHERE ID='$id'";
+		$result_mesaj = mysqli_query($conectare, $mesaj);
+		$row_mesaj = mysqli_fetch_assoc($result_mesaj);
+
+
+		$update = "UPDATE message SET Read_M = '1' WHERE ID='$id'";
+		$result_update = mysqli_query($conectare, $update);
+
+		if($_SESSION['id'] == $row_mesaj['To_M'])
+		{
+			$id = $row_mesaj['From_M'];
+		$user = "SELECT * FROM users WHERE ID='$id'";
+		$result_user = mysqli_query($conectare, $user);
+		$row_user = mysqli_fetch_assoc($result_user);
+
+
+		echo '<p><b>From:</b> '.$row_user["Name"].'</p>';
+		echo '<p><b>Subject:</b> '.$row_mesaj["Subject"].'</p>';
+		echo '<p><b>Date to sent: </b> '.$row_mesaj["Date_M"].'</p>';
+		echo '<div class="mesaj"><p id="mesaj"><b>Message:</b><br>'.$row_mesaj["Message"].'</p></div>';
+		}
+		else
+		{
+			echo "You don't have access to view this message!";
+			exit(0);
+		}
+
+		
 	?>
 
-
-
-</div>
-
-<br>
-<br>
-<br>
-
+	<a href="message.php" style="margin-left: 20px;"><< Back</a>
 
 </div>
+
 <script type="text/javascript" src="assets/js/script.js?v1.0"></script>
 </body>
 </html>
