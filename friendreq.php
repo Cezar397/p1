@@ -4,30 +4,8 @@
 
 	session_start();
 
-
-
 	if(!isset($_SESSION['nume']))
 		header("Location: login.php?status=needlog");
-
-
-	if(isset($_GET['id']))
-	{
-		$id = $_GET['id'];
-
-		$select = "SELECT * FROM users WHERE ID = '$id'";
-		$result = mysqli_query($conectare, $select);
-		$row = $result->fetch_assoc();
-
-		$meid = $_SESSION['id'];
-		$me = "SELECT * FROM users WHERE ID='$meid'";
-		$result = mysqli_query($conectare, $me);
-		$rowme = $result->fetch_assoc();
-
-	
-	}else
-	{
-		header("Location: login.php?status=needlog");
-	}
 
 ?>
 <!DOCTYPE html>
@@ -50,6 +28,7 @@
 	<link rel="stylesheet" type="text/css"  media="screen and (min-width:900px)" href="assets/css/widescreen.css?v1.0">
 	<link rel="stylesheet" type="text/css"  media="screen and (min-width:630px) and (max-width: 900px)" href="assets/css/landscape.css?v1.0">
 	<link rel="stylesheet" type="text/css"  media="screen and (max-width:600px)" href="assets/css/smallscreen.css?v1.0">
+	<link rel="stylesheet" type="text/css" href="assets/css/register_login_contact.css?v1.0">
 	<!-- END CSS -->
 
 
@@ -273,116 +252,75 @@
 	</nav>
 </div>
 
-<div class="content">
 <div class="container">
+	<div class="content">
+	<?php
 
-	<ul>	
-		<li>Name: <?php echo $row['Name']; ?></li>
-		<li>Email: <?php echo $row['Email'] ?></li>
-		<li>Clasa:
-			<?php
-				switch($row['Admin'])
+		echo '<div class="message">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>From</th>
+						
+						<th>Date to sent</th>
+						<th>Accept</th>
+					</tr>
+				</thead>
+				<tbody>
+				';
+//<th>View</th>
+
+			
+	
+		$id = $_SESSION['id'];
+		$friend = "SELECT * FROM friendreq WHERE To_F='$id'";
+		$result_friend = mysqli_query($conectare, $friend);
+
+		if(mysqli_num_rows($result_friend))
+		{
+			while($row_friend = mysqli_fetch_assoc($result_friend))
 				{
-					case '0':
-						echo "User";
-						break;
-					case '1':
-						echo 'Helper';
-						break;
-					case '2':
-						echo 'Moderator';
-						break;
-					case '3':
-						echo 'Administrator';
-						break;
-					case '4':
-						echo 'SySop';
-						break;
-					default:
-						echo 'unknown';
-						break;
-				}
+					$id = $row_friend['From_F'];
+					$user = "SELECT * FROM users WHERE ID='$id'";
+					$result_user = mysqli_query($conectare, $user);
+					$row_user = mysqli_fetch_assoc($result_user);
+
+					echo '
+				
+					<tr>
+						<td><a href="profil.php?id='.$row_friend["From_F"].'">'.$row_user['Name'].'</a></td>
+						
+						<td>'.$row_friend["Date_F"].'</td>';
+
+
+			//<td><a href="view.php?id='.$row_friend["ID"].'">View</a></td>	
+					if($row_friend["Accept_Friend"] == 0)
+					echo '
+						<td><a href="accept.php?id='.$row_friend["ID"].'">Accept</a> OR <a href="reject.php?id='.$row_friend["ID"].'">Reject</a></td>
+					
+						';
+					else
+						echo 
+					'
+						<td><a href="reject.php?id='.$row_friend["ID"].'">Delete</a></td>
+						</tr>
+					';
+			
+		}
+}
 
 
 
-			?>
-	</ul>
+		echo '</tbody></div>';
 
-
-	<?php
-
-
-		$idc = $_GET['id'];
-
-		if($_SESSION['id'] != $idc)
-			 echo '<a href="sendmessage.php?receiver='.$row["ID"].'">Send Message <a>';
-		else
-			 echo '<a href="message.php">Message<a>';
-
-
-
-		echo "<br>";
-	   if($rowme['Admin']>3 && $rowme['ID'] != $idc && $rowme['Logas'] == 0)
-	   {
-	   	echo '<a href="logas.php?id='.$idc.'">Log as</a>';
-	   }else if($_SESSION['logas'] == 1)
-	   {
-	   		echo '<a href="back.php">Back</a>';
-	   }
-
-
-	   echo "<br>";
-
-	   if($idc != $_SESSION['id'])
-	   echo '<a href="include/addfriend.inc.php?id='.$idc.'">Add Friend</a>';
-	else
-		echo '<a href="friendreq.php">Friends</a>';
-	     ?>
-
-	<?php
-
-
-
-		if($rowme['Admin'] > $row['Admin'] && $rowme['ID'] != $row['ID'] && $rowme['Admin'] > 3)
-			 echo'
-			<form action="include/changelevel.inc.php?id='.$row["ID"].'" method="POST">
-				<select name="level">
-					<option value="void"></option>
-					<option value="user">User(0)</option>
-					<option value="helper">Helper(1)</option>
-					<option value="moderator">Moderator(2)</option>
-					<option value="admin">Administrator(3)</option>
-					<option value="sysop">SySop(4)</option>
-				</select>
-				<input type="submit" name="submit" value="Change">
-			</form>';
 
 		
-		echo '<p>Users: </p>';
-		$users = "SELECT * FROM users";
-		$result3 = mysqli_query($conectare, $users);
 
-			if(mysqli_num_rows($result3))
-			{	
-				while($row_users = mysqli_fetch_assoc($result3))
-				{	
-					$id = $row_users['ID'];
-					if($id != $_SESSION['id'])
-					echo '<a href="profil.php?id='.$id.'">'.$row_users['Name'].'<a>'.PHP_EOL;
-				}
-			}
+
 	?>
-
-
-
+	</div>
 </div>
 
-<br>
-<br>
-<br>
-
-
-</div>
 <script type="text/javascript" src="assets/js/script.js?v1.0"></script>
 </body>
 </html>

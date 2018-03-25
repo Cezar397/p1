@@ -13,7 +13,7 @@
 			$update = "UPDATE users SET Logas = 1 WHERE id='$meid'";
 	    $result_update = mysqli_query($conectare, $update);
 			$_SESSION['id'] = $_GET['id'];
-
+		$_SESSION['logas'] = 0;
 		$_SESSION['logas'] = 1;
 
 		}
